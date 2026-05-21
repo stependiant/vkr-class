@@ -112,15 +112,25 @@ relation/.style={-Latex, line width=0.65pt}
 
 Одним из основных компонентов платформы является модуль расчета доступных слотов. Он определяет интервалы, на которые клиент может записаться к мастеру. Расчет выполняется на основе часового пояса мастера, длительности слота, регулярных правил рабочей доступности, уже созданных активных записей и занятых интервалов внешнего календаря Google.
 
-Алгоритм расчета включает следующие этапы:
-\begin{enumerate}
-\item получение настроек расписания и правил доступности мастера;
-\item построение набора потенциальных слотов на выбранный период;
-\item получение активных бронирований мастера из базы данных;
-\item получение занятых интервалов из Google Calendar;
-\item объединение занятых интервалов и исключение пересекающихся слотов;
-\item возврат клиентскому приложению только доступных интервалов.
-\end{enumerate}
+Алгоритм расчета включает следующие этапы.
+
+Этап 1. Получение настроек расписания мастера.
+Система загружает длительность слота, часовой пояс мастера и регулярные правила рабочей доступности. Эти данные определяют границы рабочего времени, в пределах которых могут быть сформированы потенциальные интервалы для записи.
+
+Этап 2. Построение набора потенциальных слотов.
+На основании выбранного клиентом периода и правил доступности система формирует предварительный набор временных интервалов. Каждый слот строится с учетом длительности записи и не выходит за пределы рабочего интервала мастера.
+
+Этап 3. Получение активных бронирований.
+Из базы данных выбираются существующие записи мастера за указанный период. При расчете учитываются только активные бронирования, поскольку отмененные записи не должны блокировать повторное использование временного интервала.
+
+Этап 4. Получение занятых интервалов из Google Calendar.
+Если у мастера подключен внешний календарь, система запрашивает занятость за выбранный период через Google Calendar API. Полученные интервалы используются как дополнительные ограничения доступности.
+
+Этап 5. Исключение пересекающихся интервалов.
+Активные бронирования и интервалы внешнего календаря объединяются в общий набор занятости. После этого из предварительного набора слотов исключаются все интервалы, которые пересекаются хотя бы с одним занятым промежутком.
+
+Этап 6. Возврат доступных слотов клиентскому приложению.
+После фильтрации система возвращает клиентскому приложению только свободные интервалы. Такой результат используется для отображения календаря записи и последующего создания бронирования.
 
 Такой алгоритм позволяет мастеру задавать рабочую доступность заранее, а клиенту видеть только те интервалы, которые действительно могут быть забронированы.
 
@@ -221,7 +231,7 @@ ER-модель базы данных представлена на рисунк
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.98\linewidth,height=0.72\textheight,keepaspectratio]{er-diagram.png}
+\includegraphics[width=\linewidth]{er-diagram.png}
 \caption{ER-модель базы данных}
 \label{er-model:image}
 \end{figure}
@@ -242,7 +252,7 @@ ER-модель базы данных представлена на рисунк
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.98\linewidth,height=0.82\textheight,keepaspectratio]{relation-diagram.png}
+\includegraphics[width=\linewidth,height=0.82\textheight]{relation-diagram.png}
 \caption{Реляционная модель базы данных}
 \label{relation-model:image}
 \end{figure}
@@ -255,8 +265,10 @@ ER-модель базы данных представлена на рисунк
 
 В описании таблиц ниже знак «*» в графе «Обяз.» означает, что атрибут не допускает значение \texttt{NULL}.
 
+В таблицах \ref{db:users}--\ref{db:outbox} приведено подробное описание структуры таблиц базы данных.
+
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «users» (Пользователи)\label{db:users}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -277,7 +289,7 @@ UK & * & \texttt{email} & \texttt{varchar(255)} & Адрес электронн�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «masters» (Мастера)\label{db:masters}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -295,7 +307,7 @@ FK, UK & * & \texttt{user\_id} & \texttt{bigint} & Ссылка на учетн�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «clients» (Клиенты)\label{db:clients}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -311,7 +323,7 @@ FK, UK & * & \texttt{user\_id} & \texttt{bigint} & Ссылка на учетн�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «master\_client\_links» (Связи клиентов с мастерами)\label{db:links}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -326,7 +338,7 @@ FK, UK & * & \texttt{client\_id} & \texttt{bigint} & Ссылка на клие�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «invites» (Приглашения)\label{db:invites}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -347,7 +359,7 @@ UK & * & \texttt{token} & \texttt{varchar(128)} & Уникальный токе�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «master\_schedule\_settings» (Настройки расписания мастера)\label{db:schedule-settings}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -363,7 +375,7 @@ FK, UK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, которо�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «master\_availability\_rules» (Правила рабочей доступности)\label{db:availability-rules}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -382,7 +394,7 @@ FK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, которому 
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «bookings» (Бронирования)\label{db:bookings}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -405,7 +417,7 @@ UK &  & \texttt{google\_event\_id} & \texttt{varchar(512)} & Идентифик�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «google\_calendar\_connections» (Подключения Google Calendar)\label{db:google}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -429,7 +441,7 @@ FK, UK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, подклю�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «notification\_destinations» (Каналы уведомлений)\label{db:destinations}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -449,7 +461,7 @@ UK & * & \texttt{channel} & \texttt{varchar(32)} & Тип канала дост�
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «notification\_link\_tokens» (Коды привязки уведомлений)\label{db:notification-tokens}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead
@@ -467,7 +479,7 @@ UK & * & \texttt{code} & \texttt{varchar(64)} & Одноразовый код п
 }
 
 {\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{4.5cm}|p{3.0cm}|X|}
+\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
 \caption{Атрибуты таблицы «outbox\_events» (Исходящие доменные события)\label{db:outbox}}\\ \hline
 \centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
 \endfirsthead

@@ -197,7 +197,7 @@
         \vskip -0.3cm        
 	\footnotesize{наименование предприятия, организации, учреждения}
 
-        \normalsize Студента\hspace{0.5cm}\fillleft{\Курс курса, группы \Группа}\\
+        \normalsize Студента\hspace{0.5cm}\fillleft{\Курс{} курса, группы \Группа}\\
 
         \renewcommand{\baselinestretch}{1}
 	\footnotesize{курса, группы}	

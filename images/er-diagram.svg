@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1080" viewBox="0 0 1500 1080">
+<defs>
+  <marker id="one" markerWidth="12" markerHeight="18" refX="6" refY="9" orient="auto" markerUnits="strokeWidth">
+    <path d="M6 2 V16" fill="none" stroke="#d68a28" stroke-width="1.8"/>
+  </marker>
+  <marker id="many" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="strokeWidth">
+    <path d="M2 2 L17 9 L2 16" fill="none" stroke="#d68a28" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="zeroOne" markerWidth="25" markerHeight="18" refX="24" refY="9" orient="auto" markerUnits="strokeWidth">
+    <circle cx="5" cy="9" r="3.8" fill="#fff" stroke="#d68a28" stroke-width="1.6"/>
+    <path d="M15 2 V16" fill="none" stroke="#d68a28" stroke-width="1.7"/>
+  </marker>
+  <marker id="zeroMany" markerWidth="31" markerHeight="18" refX="30" refY="9" orient="auto" markerUnits="strokeWidth">
+    <circle cx="5" cy="9" r="3.8" fill="#fff" stroke="#d68a28" stroke-width="1.5"/>
+    <path d="M13 2 L30 9 L13 16" fill="none" stroke="#d68a28" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+    <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000" flood-opacity="0.10"/>
+  </filter>
+</defs>
+<style>
+  .title { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 24px; font-weight: 700; fill: #222222; }
+  .entity-title { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 20px; font-weight: 700; fill: #222222; }
+  .field { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 18px; fill: #222222; }
+  .field-small { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 16px; fill: #555555; }
+  .label { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 17px; fill: #b36b13; font-style: italic; }
+  .rel { fill: none; stroke: #d68a28; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+  .note { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 15px; fill: #555555; }
+</style>
+<rect x="0" y="0" width="1500" height="1080" fill="#ffffff"/>
+<text class="title" x="750.0" y="35" text-anchor="middle">ER-модель данных Easyappoint</text>
+
+<path class="rel" d="M 590 150 L 520 150 L 520 248 L 310 248 L 310 280" marker-start="url(#one)" marker-end="url(#zeroOne)"/>
+<rect x="352.0" y="221.0" width="116.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="410" y="239" text-anchor="middle">имеет профиль</text>
+<path class="rel" d="M 910 150 L 980 150 L 980 248 L 1190 248 L 1190 280" marker-start="url(#one)" marker-end="url(#zeroOne)"/>
+<rect x="1032.0" y="221.0" width="116.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="1090" y="239" text-anchor="middle">имеет профиль</text>
+<path class="rel" d="M 470 340 L 590 340" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="501.0" y="313.0" width="58.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="530" y="331" text-anchor="middle">имеет</text>
+<path class="rel" d="M 1030 340 L 910 340" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="941.0" y="313.0" width="58.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="970" y="331" text-anchor="middle">имеет</text>
+<path class="rel" d="M 310 430 L 310 540" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="329.0" y="474.0" width="64.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="333" y="492" text-anchor="start">задает</text>
+<path class="rel" d="M 150 395 L 58 395 L 58 855 L 130 855" marker-start="url(#one)" marker-end="url(#zeroOne)"/>
+<rect x="59.0" y="742.0" width="92.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="63" y="760" text-anchor="start">подключает</text>
+<path class="rel" d="M 470 395 L 530 395 L 530 615 L 590 615" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="495.0" y="478.0" width="68.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="529" y="496" text-anchor="middle">создает</text>
+<path class="rel" d="M 1030 395 L 970 395 L 970 615 L 910 615" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="930.0" y="478.0" width="82.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="971" y="496" text-anchor="middle">принимает</text>
+<path class="rel" d="M 750 690 L 750 795" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="764.0" y="729.0" width="108.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="768" y="747" text-anchor="start">используется</text>
+<path class="rel" d="M 470 415 L 510 415 L 510 880 L 590 880" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="446.0" y="737.0" width="128.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="510" y="755" text-anchor="middle">получает записи</text>
+<path class="rel" d="M 1030 385 L 990 385 L 990 880 L 910 880" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="932.0" y="737.0" width="116.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="990" y="755" text-anchor="middle">создает запись</text>
+<path class="rel" d="M 910 115 L 1435 115 L 1435 615 L 1370 615" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
+<rect x="1332.0" y="212.0" width="102.0" height="23" fill="#fff" opacity="0.94"/>
+<text class="label" x="1430" y="230" text-anchor="end">настраивает</text>
+<g>
+<rect x="590" y="70" width="320" height="154" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="590" y="70" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="618" cy="87.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="618" y="92.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="750.0" y="93" text-anchor="middle">Пользователь</text>
+<circle cx="608" cy="121" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="126">id : BIGINT</text>
+<text class="field-small" x="892" y="126" text-anchor="end">«PK»</text>
+<circle cx="608" cy="148" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="153">email : VARCHAR</text>
+<text class="field-small" x="892" y="153" text-anchor="end">«UK»</text>
+<circle cx="608" cy="175" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="180">role : VARCHAR</text>
+<circle cx="608" cy="202" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="207">telegram_user_id : BIGINT</text>
+<text class="field-small" x="892" y="207" text-anchor="end">«UK»</text>
+</g>
+<g>
+<rect x="150" y="280" width="320" height="154" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="150" y="280" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="178" cy="297.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="178" y="302.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="310.0" y="303" text-anchor="middle">Мастер</text>
+<circle cx="168" cy="331" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="182" y="336">id : BIGINT</text>
+<text class="field-small" x="452" y="336" text-anchor="end">«PK»</text>
+<circle cx="168" cy="358" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="182" y="363">user_id : BIGINT</text>
+<text class="field-small" x="452" y="363" text-anchor="end">«FK, UK»</text>
+<circle cx="168" cy="385" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="182" y="390">display_name : VARCHAR</text>
+<circle cx="168" cy="412" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="182" y="417">timezone : VARCHAR</text>
+</g>
+<g>
+<rect x="1030" y="280" width="320" height="127" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="1030" y="280" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="1058" cy="297.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="1058" y="302.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="1190.0" y="303" text-anchor="middle">Клиент</text>
+<circle cx="1048" cy="331" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="336">id : BIGINT</text>
+<text class="field-small" x="1332" y="336" text-anchor="end">«PK»</text>
+<circle cx="1048" cy="358" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="363">user_id : BIGINT</text>
+<text class="field-small" x="1332" y="363" text-anchor="end">«FK, UK»</text>
+<circle cx="1048" cy="385" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="390">display_name : VARCHAR</text>
+</g>
+<g>
+<rect x="590" y="300" width="320" height="127" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="590" y="300" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="618" cy="317.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="618" y="322.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="750.0" y="323" text-anchor="middle">Связь мастер-клиент</text>
+<circle cx="608" cy="351" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="356">id : BIGINT</text>
+<text class="field-small" x="892" y="356" text-anchor="end">«PK»</text>
+<circle cx="608" cy="378" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="383">master_id : BIGINT</text>
+<text class="field-small" x="892" y="383" text-anchor="end">«FK, UK»</text>
+<circle cx="608" cy="405" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="410">client_id : BIGINT</text>
+<text class="field-small" x="892" y="410" text-anchor="end">«FK, UK»</text>
+</g>
+<g>
+<rect x="130" y="540" width="340" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="130" y="540" width="340" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="158" cy="557.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="158" y="562.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="300.0" y="563" text-anchor="middle">Рабочая доступность</text>
+<circle cx="148" cy="591" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="596">id : BIGINT</text>
+<text class="field-small" x="452" y="596" text-anchor="end">«PK»</text>
+<circle cx="148" cy="618" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="623">master_id : BIGINT</text>
+<text class="field-small" x="452" y="623" text-anchor="end">«FK»</text>
+<circle cx="148" cy="645" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="650">day_of_week : INTEGER</text>
+<circle cx="148" cy="672" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="677">start_time : TIME</text>
+<circle cx="148" cy="699" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="704">end_time : TIME</text>
+</g>
+<g>
+<rect x="130" y="795" width="340" height="127" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="130" y="795" width="340" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="158" cy="812.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="158" y="817.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="300.0" y="818" text-anchor="middle">Google Calendar</text>
+<circle cx="148" cy="846" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="851">id : BIGINT</text>
+<text class="field-small" x="452" y="851" text-anchor="end">«PK»</text>
+<circle cx="148" cy="873" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="878">master_id : BIGINT</text>
+<text class="field-small" x="452" y="878" text-anchor="end">«FK»</text>
+<circle cx="148" cy="900" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="162" y="905">google_calendar_id : VARCHAR</text>
+</g>
+<g>
+<rect x="590" y="540" width="320" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="590" y="540" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="618" cy="557.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="618" y="562.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="750.0" y="563" text-anchor="middle">Приглашение</text>
+<circle cx="608" cy="591" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="596">id : BIGINT</text>
+<text class="field-small" x="892" y="596" text-anchor="end">«PK»</text>
+<circle cx="608" cy="618" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="623">master_id : BIGINT</text>
+<text class="field-small" x="892" y="623" text-anchor="end">«FK»</text>
+<circle cx="608" cy="645" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="650">client_id : BIGINT</text>
+<text class="field-small" x="892" y="650" text-anchor="end">«FK»</text>
+<circle cx="608" cy="672" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="677">token : VARCHAR</text>
+<text class="field-small" x="892" y="677" text-anchor="end">«UK»</text>
+<circle cx="608" cy="699" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="704">status : VARCHAR</text>
+</g>
+<g>
+<rect x="590" y="795" width="320" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="590" y="795" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="618" cy="812.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="618" y="817.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="750.0" y="818" text-anchor="middle">Бронирование</text>
+<circle cx="608" cy="846" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="851">id : BIGINT</text>
+<text class="field-small" x="892" y="851" text-anchor="end">«PK»</text>
+<circle cx="608" cy="873" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="878">master_id : BIGINT</text>
+<text class="field-small" x="892" y="878" text-anchor="end">«FK»</text>
+<circle cx="608" cy="900" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="905">client_id : BIGINT</text>
+<text class="field-small" x="892" y="905" text-anchor="end">«FK»</text>
+<circle cx="608" cy="927" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="932">start_at : TIMESTAMP</text>
+<circle cx="608" cy="954" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="622" y="959">status : VARCHAR</text>
+</g>
+<g>
+<rect x="1030" y="540" width="340" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
+<rect x="1030" y="540" width="340" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
+<circle cx="1058" cy="557.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
+<text x="1058" y="562.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
+<text class="entity-title" x="1200.0" y="563" text-anchor="middle">Канал уведомлений</text>
+<circle cx="1048" cy="591" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="596">id : BIGINT</text>
+<text class="field-small" x="1352" y="596" text-anchor="end">«PK»</text>
+<circle cx="1048" cy="618" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="623">user_id : BIGINT</text>
+<text class="field-small" x="1352" y="623" text-anchor="end">«FK»</text>
+<circle cx="1048" cy="645" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="650">channel : VARCHAR</text>
+<circle cx="1048" cy="672" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="677">destination : VARCHAR</text>
+<circle cx="1048" cy="699" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
+<text class="field" x="1062" y="704">enabled : BOOLEAN</text>
+</g>
+</svg>
