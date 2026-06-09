@@ -13,8 +13,11 @@
 \usepackage{setspace}
 \renewcommand\theadfont{} % шрифт в /thead
 \usepackage{array} % для определения новых типов столбцов таблиц
+\usepackage{ragged2e}
 \newcolumntype{T}{>{\centering\arraybackslash}X} % новый тип столбца T - автоматическая ширина столбца с выравниванием по центру
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X} % новый тип столбца R - автоматическая ширина столбца с выравниванием по правому краю
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash\hspace{0pt}}X} % автоматическая ширина без растягивания пробелов
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash\hspace{0pt}}p{#1}} % фиксированная ширина без растягивания пробелов
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}} % новый тип столбца C - фиксированная ширина столбца с выравниванием по центру
 \newcolumntype{r}[1]{>{\raggedleft\arraybackslash}p{#1}} % новый тип столбца r - фиксированная ширина столбца с выравниванием по правому краю
 \newcommand{\centrow}{\centering\arraybackslash} % командой \centrow можно центрировать одну ячейку (заголовок) в столбце типа X или p, оставив в оcтальных ячейках другой тип выравнивания

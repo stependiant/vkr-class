@@ -1,10 +1,48 @@
 \appendix{Фрагменты исходного кода программы}
 
-main.tex
-\lstinputlisting[language=Tex, frame=none]{main.tex}
+В приложении приведены фрагменты исходного кода основных компонентов платформы Easyappoint: серверной части, клиентского приложения, сервиса уведомлений и миграции базы данных.
 
-ТехПроект.tex
-\lstinputlisting[language=Tex, frame=none]{ТехПроект.tex}
+\subsection*{Фрагмент класса \texttt{BookingService}}
+\addcontentsline{toc}{subsection}{Фрагмент класса BookingService}
+
+Фрагмент демонстрирует создание бронирования, проверку роли клиента, проверку пересечений, проверку доступности слота, сохранение записи и публикацию события.
+
+\lstinputlisting[language=Java, frame=none, firstline=42, lastline=103]{../../apps/data-service/src/main/kotlin/rodi/easyappoint/dataservice/bookings/service/BookingService.kt}
+
+\subsection*{Фрагмент класса \texttt{AvailabilitySlotCalculator}}
+\addcontentsline{toc}{subsection}{Фрагмент класса AvailabilitySlotCalculator}
+
+Фрагмент демонстрирует построение кандидатных слотов и исключение занятых временных окон.
+
+\lstinputlisting[language=Java, frame=none, firstline=8, lastline=51]{../../apps/data-service/src/main/kotlin/rodi/easyappoint/dataservice/availability/AvailabilitySlotCalculator.kt}
+
+\subsection*{Фрагмент контроллера \texttt{BookingController}}
+\addcontentsline{toc}{subsection}{Фрагмент контроллера BookingController}
+
+Фрагмент демонстрирует REST-маршруты для просмотра, создания, отмены и изменения бронирований.
+
+\lstinputlisting[language=Java, frame=none, firstline=15, lastline=85]{../../apps/data-service/src/main/kotlin/rodi/easyappoint/dataservice/bookings/controller/BookingController.kt}
+
+\subsection*{Фрагмент маршрутизации клиентского приложения}
+\addcontentsline{toc}{subsection}{Фрагмент маршрутизации клиентского приложения}
+
+Фрагмент демонстрирует ролевую маршрутизацию React-приложения для мастера, клиента и администратора.
+
+\lstinputlisting[frame=none, firstline=27, lastline=108]{../../apps/frontend/src/App.tsx}
+
+\subsection*{Фрагмент обработки Kafka-событий}
+\addcontentsline{toc}{subsection}{Фрагмент обработки Kafka-событий}
+
+Фрагмент демонстрирует обработку событий бронирования и Telegram-сообщений в сервисе уведомлений.
+
+\lstinputlisting[language=Java, frame=none, firstline=10, lastline=61]{../../apps/telegram-bot/src/main/kotlin/rodi/easyappoint/telegrambot/events/TelegramBotEventProcessor.kt}
+
+\subsection*{Фрагмент миграции базы данных}
+\addcontentsline{toc}{subsection}{Фрагмент миграции базы данных}
+
+Фрагмент демонстрирует таблицы приглашений, расписания мастера, бронирований и outbox-событий.
+
+\lstinputlisting[language=SQL, frame=none, firstline=92, lastline=196]{../../apps/data-service/src/main/resources/db/migration/V1__init.sql}
 
 \ifВКР{
 \newpage

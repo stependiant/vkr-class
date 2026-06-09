@@ -1,14 +1,14 @@
 \section{Технический проект}
 \subsection{Архитектура программной системы}
 
-Разрабатываемая платформа Easyappoint предназначена для онлайн-бронирования услуг частного мастера. Система обеспечивает регистрацию пользователей, настройку рабочей доступности мастера, создание пригласительных ссылок, просмотр свободных слотов, оформление записи клиента, синхронизацию с внешним календарем и отправку уведомлений.
+Разрабатываемая платформа Easyappoint предназначена для онлайн-бронирования услуг частного мастера. Система обеспечивает регистрацию пользователей, настройку рабочей доступности мастера, создание пригласительных ссылок, просмотр свободных слотов, оформление записи клиента, синхронизацию с внешним календарем, отправку уведомлений и административный контроль состояния платформы.
 
 Платформа построена по событийно-ориентированной микросервисной архитектуре. Данный подход позволяет отделить пользовательский интерфейс, основную бизнес-логику, хранение данных и доставку уведомлений. Основные операции бронирования выполняются синхронно через HTTP API, а уведомления и внешние интеграции обрабатываются асинхронно через событийный контур.
 
 Архитектура системы включает следующие компоненты:
 \begin{itemize}
-\item клиентское web-приложение, реализующее интерфейсы мастера и клиента;
-\item сервис данных \texttt{data-service}, отвечающий за аутентификацию, пользователей, приглашения, рабочую доступность, бронирования и интеграцию с Google Calendar;
+\item клиентское web-приложение, реализующее интерфейсы мастера, клиента и администратора;
+\item сервис данных \texttt{data-service}, отвечающий за аутентификацию, пользователей, приглашения, рабочую доступность, бронирования, административные операции и интеграцию с Google Calendar;
 \item реляционную базу данных PostgreSQL для хранения учетных записей, профилей, расписаний, записей, приглашений и служебных событий;
 \item брокер сообщений Kafka для передачи доменных событий между сервисами;
 \item сервис Telegram-уведомлений, который получает события записи и отправляет сообщения пользователям;
@@ -50,17 +50,17 @@ relation/.style={-Latex, line width=0.65pt}
 
 \subsection{Платформа онлайн-бронирования Easyappoint}
 
-Платформа онлайн-бронирования Easyappoint является центральной частью разрабатываемой системы. Она объединяет работу мастера, клиента, внешнего календаря и канала уведомлений. В отличие от простого электронного журнала записей, система не только хранит бронирования, но и рассчитывает доступные интервалы с учетом рабочей доступности мастера, уже занятых слотов и данных внешнего календаря.
+Платформа онлайн-бронирования Easyappoint является центральной частью разрабатываемой системы. Она объединяет работу мастера, клиента, администратора, внешнего календаря и канала уведомлений. В отличие от простого электронного журнала записей, система не только хранит бронирования, но и рассчитывает доступные интервалы с учетом рабочей доступности мастера, уже занятых слотов и данных внешнего календаря.
 
 \subsubsection{Общая архитектура модуля}
 
 Модуль построен по многоуровневой архитектуре и включает следующие логические слои:
 \begin{itemize}
 \item слой маршрутизации, принимающий HTTP-запросы, выполняющий первичную валидацию и передающий управление в соответствующий обработчик;
-\item сервисный слой, в котором реализованы основные бизнес-правила: регистрация, создание приглашений, расчет слотов, оформление бронирования, отмена и изменение записи;
+\item сервисный слой, в котором реализованы основные бизнес-правила: регистрация, создание приглашений, расчет слотов, оформление бронирования, отмена и изменение записи, административный просмотр и управление;
 \item слой доступа к данным, выполняющий операции чтения и записи в PostgreSQL через jOOQ и пул соединений HikariCP;
 \item интеграционный слой, отвечающий за работу с Google Calendar, Kafka и Telegram;
-\item клиентский слой, реализованный в виде React-приложения с отдельными пользовательскими сценариями для мастера и клиента.
+\item клиентский слой, реализованный в виде React-приложения с отдельными пользовательскими сценариями для мастера, клиента и администратора.
 \end{itemize}
 
 Такое разделение упрощает сопровождение системы: изменение интерфейса не требует переработки бизнес-логики, а изменение канала уведомлений не влияет на транзакционное сохранение записи.
@@ -69,11 +69,41 @@ relation/.style={-Latex, line width=0.65pt}
 
 Серверная часть реализована на Kotlin с использованием Ktor. Kotlin выбран как статически типизированный язык, позволяющий компактно описывать бизнес-логику и снижать вероятность ошибок при работе с состояниями записей, ролями пользователей и временными интервалами. Ktor используется для построения HTTP API, настройки маршрутов, CORS, обработки ошибок и health-endpoint.
 
-Клиентская часть реализована на React и TypeScript. TypeScript позволяет явно описывать структуры запросов и ответов, а React подходит для построения интерактивного web-интерфейса с отдельными кабинетами мастера и клиента. Для сборки клиентского приложения используется Vite.
+Клиентская часть реализована на React и TypeScript. TypeScript позволяет явно описывать структуры запросов и ответов, а React подходит для построения интерактивного web-интерфейса с отдельными кабинетами мастера, клиента и администратора. Для сборки клиентского приложения используется Vite.
 
 Для хранения данных используется PostgreSQL. Схема базы данных управляется миграциями Flyway. Доступ к данным выполняется через jOOQ, что позволяет использовать типизированные SQL-запросы и явно контролировать транзакции. Для управления соединениями применяется HikariCP.
 
 Событийный обмен реализован через Kafka. Он используется для передачи событий бронирования и уведомлений между сервисом данных и сервисом Telegram-уведомлений. Такой подход позволяет сохранить запись независимо от временной доступности внешнего канала связи.
+
+\subsubsection{Структура каталогов проекта}
+
+Исходный код Easyappoint организован как монорепозиторий. Такая структура позволяет хранить клиентское приложение, серверные сервисы, контракты, инфраструктурные манифесты и вспомогательную документацию в одном репозитории, но при этом сохранять разделение ответственности между компонентами.
+
+Основные каталоги проекта представлены в таблице \ref{project:structure}. Пути в таблице указаны относительно корня репозитория.
+
+\begin{xltabular}{\textwidth}{|p{4.7cm}|p{3.3cm}|X|}
+\caption{Структура каталогов проекта Easyappoint\label{project:structure}}\\ \hline
+\centrow Каталог & \centrow Содержимое & \centrow Назначение \\ \hline
+\endfirsthead
+\caption*{Продолжение таблицы \ref{project:structure}}\\ \hline
+\centrow Каталог & \centrow Содержимое & \centrow Назначение \\ \hline
+\finishhead
+\texttt{apps/frontend} & React, TypeScript, Vite & Клиентское web-приложение. Содержит страницы мастера, клиента и администратора, API-обертки, компоненты интерфейса, стили и локализацию. \\ \hline
+\texttt{apps/frontend/src/api} & TypeScript-модули API & Содержит функции обращения к серверным REST-методам: аутентификация, пользователи, приглашения, бронирования, доступность, Google Calendar и административные операции. \\ \hline
+\texttt{apps/frontend/src/pages} & Страницы интерфейса & Содержит пользовательские экраны, сгруппированные по ролям: \texttt{admin}, \texttt{client}, \texttt{master}, \texttt{public}, \texttt{shared}. \\ \hline
+\texttt{apps/data-service} & Kotlin, Ktor, PostgreSQL & Основной серверный сервис платформы. Реализует аутентификацию, пользователей, расписание, приглашения, бронирования, интеграции, административные функции и публикацию событий. \\ \hline
+\texttt{dataservice} & Серверные модули & Внутренний пакет \texttt{apps/data-service}. Содержит пакеты \texttt{auth}, \texttt{user}, \texttt{masters}, \texttt{availability}, \texttt{invites}, \texttt{bookings}, \texttt{google}, \texttt{notifications}, \texttt{admin}, \texttt{outbox}, \texttt{security}, \texttt{observability}. \\ \hline
+\texttt{db/migration} & Flyway-миграции & Каталог ресурсов \texttt{apps/data-service}. Хранит SQL-миграции схемы PostgreSQL, используемые для воспроизводимого создания и обновления базы данных. \\ \hline
+\texttt{apps/telegram-bot} & Kotlin, Ktor, Kafka, Telegram Bot API & Сервис уведомлений. Получает события из Kafka, обрабатывает их и отправляет сообщения пользователям через Telegram. \\ \hline
+\texttt{telegrambot} & Модули бота & Внутренний пакет \texttt{apps/telegram-bot}. Содержит пакеты \texttt{events}, \texttt{notification}, \texttt{telegram}, \texttt{health}, \texttt{http}, \texttt{observability}, \texttt{config}, \texttt{di}. \\ \hline
+\texttt{packages/contracts} & JSON Schema & Общие контракты REST-ответов, REST-запросов и Kafka-событий. Используются для согласования взаимодействия между frontend, data-service и telegram-bot. \\ \hline
+\texttt{infra/local} & Локальная инфраструктура & Конфигурации и скрипты для запуска зависимостей в локальной среде разработки. \\ \hline
+\texttt{infra/k8s} & Kubernetes, Kustomize, Helm values & Манифесты развертывания сервисов, зависимостей, ingress, мониторинга, production overlay и вспомогательные скрипты деплоя. \\ \hline
+\texttt{bruno-api} & Коллекции API-запросов & Набор ручных запросов для проверки аутентификации, пользователей, мастеров, приглашений, бронирований, Google Calendar и health-endpoint. \\ \hline
+\texttt{docs} & Архитектурная документация и диаграммы & Содержит вспомогательные материалы проектирования, включая архитектурное описание и диаграммы. \\ \hline
+\end{xltabular}
+
+Корневой \texttt{Makefile} используется как единая точка запуска проверок и сборки. Это позволяет запускать комплексную проверку проекта без ручного перехода в каждый сервис. Прикладные сервисы находятся в каталоге \texttt{apps}, общие контракты вынесены в \texttt{packages/contracts}, а инфраструктурные сценарии отделены в \texttt{infra}. Благодаря такому разделению изменение интерфейса, серверной логики, контрактов или Kubernetes-манифестов выполняется в соответствующей части репозитория и не смешивается с другими слоями системы.
 
 \subsubsection{Реализация серверной части}
 
@@ -83,6 +113,7 @@ relation/.style={-Latex, line width=0.65pt}
 \begin{itemize}
 \item модуль аутентификации и авторизации, обеспечивающий регистрацию, вход, смену пароля и проверку JWT-токена;
 \item модуль пользователей, отвечающий за данные текущего пользователя, профиль мастера и профиль клиента;
+\item административный модуль, обеспечивающий обзор системы, управление пользователями и записями, аудит действий и чтение эксплуатационных метрик;
 \item модуль приглашений, формирующий пригласительные ссылки для подключения клиентов к мастеру;
 \item модуль рабочей доступности, рассчитывающий доступные интервалы мастера;
 \item модуль бронирований, реализующий создание, изменение, отмену и просмотр записей;
@@ -95,18 +126,19 @@ relation/.style={-Latex, line width=0.65pt}
 
 \subsubsection{Реализация клиентской части}
 
-Клиентская часть реализована как React-приложение на TypeScript. Приложение предоставляет отдельные сценарии для мастера и клиента, а доступ к разделам ограничивается на уровне маршрутов и серверной авторизации.
+Клиентская часть реализована как React-приложение на TypeScript. Приложение предоставляет отдельные сценарии для мастера, клиента и администратора, а доступ к разделам ограничивается на уровне маршрутов и серверной авторизации.
 
 В клиентском приложении выделены следующие группы экранов:
 \begin{itemize}
 \item публичные страницы входа и регистрации;
 \item кабинет мастера с разделами обзора, календаря, приглашений, клиентов, записей и слотов;
 \item кабинет клиента с просмотром доступности мастера и собственных записей;
+\item кабинет администратора с обзором системы, списком пользователей, списком записей, аудитом и мониторингом;
 \item общие настройки аккаунта: профиль, календарь, уведомления, безопасность и язык;
 \item экран подключения по пригласительной ссылке.
 \end{itemize}
 
-Обмен данными с сервером вынесен в отдельные API-модули: \texttt{authApi}, \texttt{bookingApi}, \texttt{inviteApi}, \texttt{masterApi}, \texttt{googleApi}, \texttt{userApi}. Это разделяет сетевое взаимодействие и отображение данных на экране.
+Обмен данными с сервером вынесен в отдельные API-модули: \texttt{authApi}, \texttt{bookingApi}, \texttt{inviteApi}, \texttt{masterApi}, \texttt{googleApi}, \texttt{userApi}, \texttt{adminApi}. Это разделяет сетевое взаимодействие и отображение данных на экране.
 
 \subsubsection{Алгоритм расчета доступности}
 
@@ -172,7 +204,7 @@ relation/.style={-Latex, line width=0.65pt}
 
 \subsubsection{Интеграция с Google Calendar}
 
-Интеграция с Google Calendar используется для учета внешней занятости мастера и синхронизации созданных записей. Мастер подключает календарь через OAuth-механизм, после чего в базе данных сохраняются параметры подключения: идентификатор календаря, email аккаунта, access token, refresh token, область доступа и время истечения токена.
+Интеграция с Google Calendar используется для учета внешней занятости мастера и синхронизации созданных записей. Мастер подключает календарь через OAuth-механизм \cite{oauthRfc}, после чего в базе данных сохраняются параметры подключения: идентификатор календаря, email аккаунта, access token, refresh token, область доступа и время истечения токена.
 
 При расчете доступности сервис получает занятые интервалы из внешнего календаря и исключает их из доступных слотов. При создании или изменении записи сервис формирует событие календаря. При отмене записи соответствующее событие также обновляется или удаляется во внешнем календаре.
 
@@ -192,7 +224,7 @@ relation/.style={-Latex, line width=0.65pt}
 
 Для управления пользовательской сессией используется JWT-токен. После успешного входа клиентское приложение получает токен доступа и прикладывает его к защищенным HTTP-запросам. Сервер проверяет подпись токена, идентификатор пользователя и роль.
 
-В системе используются две основные роли: мастер и клиент. Мастер управляет профилем, расписанием, приглашениями, записями и интеграциями. Клиент просматривает доступные слоты мастера и управляет своими бронированиями. Проверка прав доступа выполняется на серверной стороне, поэтому клиентский интерфейс не является единственным механизмом защиты.
+В системе используются три роли: мастер, клиент и администратор. Мастер управляет профилем, расписанием, приглашениями, записями и интеграциями. Клиент просматривает доступные слоты мастера и управляет своими бронированиями. Администратор открывает раздел \texttt{/admin/*}, просматривает сводку состояния платформы, пользователей, записи, аудит действий и эксплуатационные метрики. Проверка прав доступа выполняется на серверной стороне, поэтому клиентский интерфейс не является единственным механизмом защиты.
 
 \subsubsection{Обработка ошибок и восстановление}
 
@@ -225,7 +257,7 @@ relation/.style={-Latex, line width=0.65pt}
 
 \subsubsection{ER-модель данных}
 
-На основе анализа предметной области выделены основные сущности системы: пользователи, мастера, клиенты, связи клиента с мастером, приглашения, правила рабочей доступности, бронирования, подключения Google Calendar и каналы уведомлений. Служебные таблицы токенов привязки уведомлений и outbox-событий относятся к физической реализации и подробно раскрываются в реляционной модели.
+На основе анализа предметной области выделены основные сущности системы: пользователи, мастера, клиенты, связи клиента с мастером, приглашения, правила рабочей доступности, записи на услуги, подключения внешнего календаря и каналы уведомлений. Служебные сущности аутентификации, outbox-событий, задач календарной синхронизации и административного аудита относятся к физической реализации и подробно раскрываются в реляционной модели.
 
 ER-модель базы данных представлена на рисунке \ref{er-model:image}.
 
@@ -236,7 +268,7 @@ ER-модель базы данных представлена на рисунк
 \label{er-model:image}
 \end{figure}
 
-Центральное место в модели занимают сущности \texttt{users}, \texttt{masters}, \texttt{clients} и \texttt{bookings}. Пользователь имеет одну роль, на основе которой создается профиль мастера или клиента. Мастер задает рабочую доступность и формирует приглашения, а клиент через приглашение получает возможность записаться на свободный слот. Таблица \texttt{bookings} связывает мастера, клиента и при необходимости приглашение. Линии на диаграмме показывают связи между сущностями и кратность этих связей. Сущности \texttt{google\_calendar\_connections} и \texttt{notification\_destinations} обеспечивают интеграции с календарем и доставку уведомлений.
+Центральное место в модели занимают сущности \texttt{users}, \texttt{masters}, \texttt{clients} и \texttt{appointments}. Пользователь имеет основную роль и набор назначенных ролей; для мастера и клиента создаются предметные профили, а роль администратора используется для доступа к служебным сценариям без отдельного профильного справочника. Мастер задает рабочую доступность и формирует приглашения, а клиент через приглашение получает возможность записаться на свободный слот. Таблица \texttt{appointments} связывает мастера и клиента в конкретном временном интервале. Сущности календарной интеграции и уведомлений обеспечивают учет внешней занятости, синхронизацию событий и доставку сообщений.
 
 \subsubsection{Нормализация}
 
@@ -244,7 +276,11 @@ ER-модель базы данных представлена на рисунк
 
 Данные пользователя отделены от профилей мастера и клиента. Это позволяет хранить общие учетные сведения в таблице \texttt{users}, а роль-зависимые данные -- в таблицах \texttt{masters} и \texttt{clients}. Связь клиента с мастером вынесена в отдельную таблицу \texttt{master\_client\_links}, так как один мастер может обслуживать многих клиентов, а клиент может быть связан с разными мастерами.
 
-Данные о расписании разделены на общие настройки \texttt{master\_schedule\_settings} и регулярные правила \texttt{master\_availability\_rules}. Это позволяет независимо хранить длительность слота и набор временных интервалов по дням недели. Сведения о внешнем календаре и уведомлениях вынесены в отдельные таблицы, так как они относятся к интеграциям и не должны перегружать основную таблицу пользователей.
+Данные о расписании разделены на общие настройки \texttt{master\_schedule\_settings} и регулярные правила \texttt{master\_availability\_rules}. Это позволяет независимо хранить длительность слота и набор временных интервалов по дням недели. Записи на услуги хранятся в таблице \texttt{appointments}; их состояние ограничено значениями \texttt{ACTIVE} и \texttt{CANCELLED}, а временной интервал контролируется проверкой \texttt{start\_at < end\_at}.
+
+Сведения о внешних календарях вынесены в таблицу \texttt{calendar\_connections}. Она хранит провайдера подключения, состояние, внешний идентификатор календаря и OAuth-данные; физическая схема предусматривает провайдеры \texttt{GOOGLE} и \texttt{YANDEX}. Внешние события записей, занятые интервалы и фоновые задачи синхронизации отделены в таблицы \texttt{external\_calendar\_events}, \texttt{external\_busy\_blocks} и \texttt{calendar\_sync\_tasks}. Такой подход не перегружает основную таблицу записей и позволяет развивать интеграции независимо от доменной модели бронирования.
+
+Служебные данные также нормализованы: парольные учетные данные отделены от \texttt{users} в таблицу \texttt{password\_credentials}, дополнительные роли -- в \texttt{user\_roles}, refresh-сессии -- в \texttt{auth\_sessions}. Таблица \texttt{outbox\_events} обеспечивает надежную асинхронную публикацию доменных событий, а \texttt{admin\_audit\_events} фиксирует административные действия для последующего анализа.
 
 \subsubsection{Реляционная модель данных}
 
@@ -252,256 +288,47 @@ ER-модель базы данных представлена на рисунк
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth,height=0.82\textheight]{relation-diagram.png}
+\includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{relation-diagram.png}
 \caption{Реляционная модель базы данных}
 \label{relation-model:image}
 \end{figure}
 
-Направление стрелок на реляционной модели показывает, какая таблица содержит внешний ключ на родительскую таблицу. В таблицах используются первичные ключи типа \texttt{bigint}, внешние ключи для связи сущностей и ограничения целостности. Для ускорения запросов предусмотрены индексы по пользователям, мастерам, клиентам, статусам, времени записей и состоянию outbox-событий. Для поиска пересечений временных интервалов используется GIST-индекс по диапазону времени записи.
+Направление стрелок на реляционной модели показывает, какая таблица содержит внешний ключ на родительскую таблицу. В таблицах используются первичные ключи типа \texttt{bigint} или \texttt{uuid}, внешние ключи для связи сущностей и ограничения целостности. Для ускорения запросов предусмотрены индексы по пользователям, мастерам, клиентам, статусам, времени записей, состоянию outbox-событий и очереди календарной синхронизации. Для поиска пересечений временных интервалов активных записей используется GIST-индекс по диапазону \texttt{tstzrange(start\_at, end\_at, '[)')}.
 
 \subsubsection{Реализация базы данных}
 
-Реализация базы данных выполнена с помощью SQL-миграций Flyway. Базовая схема создается первой миграцией, после чего последующие миграции расширяют модель данных: добавляют настройки расписания мастера, названия правил доступности, дополнительные поля профиля клиента, метаданные Telegram-уведомлений и уточненный уникальный индекс для повторной записи после отмены.
+Реализация базы данных выполнена с помощью SQL-миграций Flyway. Миграция \texttt{V1\_\_init.sql} создает основную доменную, интеграционную и служебную схему. Миграция \texttt{V2\_\_admin\_audit\_events.sql} добавляет таблицу административного аудита и индексы для поиска по времени, пользователю-исполнителю, действию и целевому объекту.
 
-В описании таблиц ниже знак «*» в графе «Обяз.» означает, что атрибут не допускает значение \texttt{NULL}.
+В таблице \ref{db:physical-model} приведена физическая структура базы данных по фактическим миграциям проекта. В описании указаны ключевые атрибуты, ограничения состояний и основные связи между таблицами.
 
-В таблицах \ref{db:users}--\ref{db:outbox} приведено подробное описание структуры таблиц базы данных.
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «users» (Пользователи)\label{db:users}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
+{\footnotesize
+\begin{xltabular}{\textwidth}{|L{4.0cm}|L{4.2cm}|Y|}
+\caption{Физическая модель таблиц базы данных Easyappoint\label{db:physical-model}}\\ \hline
+\centrow Таблица & \centrow Ключевые атрибуты & \centrow Назначение и связи \\ \hline
 \endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:users}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
+\continuecaption{Продолжение таблицы \ref{db:physical-model}}
+\centrow Таблица & \centrow Ключевые атрибуты & \centrow Назначение и связи \\ \hline
 \finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор пользователя. \\ \hline
-UK &  & \texttt{telegram\_user\_id} & \texttt{bigint} & Идентификатор пользователя Telegram. \\ \hline
- &  & \texttt{username} & \texttt{varchar(128)} & Имя пользователя Telegram. \\ \hline
- &  & \texttt{first\_name} & \texttt{varchar(128)} & Имя пользователя. \\ \hline
- &  & \texttt{last\_name} & \texttt{varchar(128)} & Фамилия пользователя. \\ \hline
- & * & \texttt{role} & \texttt{varchar(16)} & Роль пользователя: \texttt{MASTER} или \texttt{CLIENT}. \\ \hline
-UK & * & \texttt{email} & \texttt{varchar(255)} & Адрес электронной почты для входа. \\ \hline
- &  & \texttt{password\_hash} & \texttt{varchar(255)} & Хеш пароля. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания записи. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
+\texttt{users} & \texttt{id}, \texttt{email}, \texttt{role}, \texttt{status}, \texttt{telegram\_user\_id} & Учетные записи пользователей. Роль ограничена значениями \texttt{MASTER}, \texttt{CLIENT}, \texttt{ADMIN}; статус -- \texttt{ACTIVE} или \texttt{DISABLED}. \\ \hline
+\texttt{password\_credentials} & \texttt{user\_id}, \texttt{password\_hash} & Парольные учетные данные пользователя. Связь один-к-одному с \texttt{users}. \\ \hline
+\texttt{user\_roles} & \texttt{user\_id}, \texttt{role} & Набор назначенных ролей пользователя. Первичный ключ состоит из \texttt{user\_id} и \texttt{role}. \\ \hline
+\texttt{auth\_sessions} & \texttt{id}, \texttt{user\_id}, \texttt{refresh\_token\_hash}, \texttt{expires\_at}, \texttt{revoked\_at} & Refresh-сессии пользователей. Сессия удаляется вместе с учетной записью. \\ \hline
+\texttt{masters} & \texttt{id}, \texttt{user\_id}, \texttt{display\_name}, \texttt{description}, \texttt{timezone} & Профиль мастера. Имеет уникальную ссылку на \texttt{users}. \\ \hline
+\texttt{clients} & \texttt{id}, \texttt{user\_id}, \texttt{display\_name} & Профиль клиента. Имеет уникальную ссылку на \texttt{users}. \\ \hline
+\texttt{master\_client\_links} & \texttt{master\_id}, \texttt{client\_id}, \texttt{created\_at} & Связь клиента с мастером. Пара \texttt{master\_id}/\texttt{client\_id} уникальна. \\ \hline
+\texttt{invites} & \texttt{master\_id}, \texttt{client\_id}, \texttt{token}, \texttt{status}, \texttt{expires\_at} & Пригласительные ссылки мастера. Статусы: \texttt{ACTIVE}, \texttt{ACCEPTED}, \texttt{REVOKED}, \texttt{EXPIRED}. \\ \hline
+\texttt{master\_schedule\_settings} & \texttt{master\_id}, \texttt{slot\_duration\_minutes} & Общие настройки расписания мастера. Длительность слота ограничена диапазоном от 5 до 720 минут. \\ \hline
+\texttt{master\_availability\_rules} & \texttt{master\_id}, \texttt{day\_of\_week}, \texttt{start\_time}, \texttt{end\_time}, \texttt{title} & Регулярные правила доступности мастера. Контролируются день недели и корректный временной интервал. \\ \hline
+\texttt{appointments} & \texttt{master\_id}, \texttt{client\_id}, \texttt{status}, \texttt{start\_at}, \texttt{end\_at}, \texttt{client\_note}, \texttt{cancelled\_at} & Записи клиента к мастеру. Статусы: \texttt{ACTIVE}, \texttt{CANCELLED}. Активные записи индексируются по мастеру, клиенту и временному окну. \\ \hline
+\texttt{outbox\_events} & \texttt{event\_id}, \texttt{aggregate\_type}, \texttt{aggregate\_id}, \texttt{event\_type}, \texttt{topic}, \texttt{payload}, \texttt{status} & Исходящие доменные события для Kafka. Статусы публикации: \texttt{PENDING}, \texttt{PUBLISHED}, \texttt{FAILED}. \\ \hline
+\texttt{calendar\_connections} & \texttt{master\_id}, \texttt{provider}, \texttt{status}, \texttt{external\_calendar\_id}, \texttt{access\_token}, \texttt{refresh\_token}, \texttt{sync\_cursor} & Подключения внешних календарей мастера. Провайдеры: \texttt{GOOGLE}, \texttt{YANDEX}; статусы: \texttt{ACTIVE}, \texttt{DISCONNECTED}, \texttt{FAILED}. \\ \hline
+\texttt{external\_calendar\_events} & \texttt{appointment\_id}, \texttt{connection\_id}, \texttt{external\_event\_id}, \texttt{sync\_status} & Связь записи приложения с внешним календарным событием. Ссылается на \texttt{appointments} и \texttt{calendar\_connections}. \\ \hline
+\texttt{external\_busy\_blocks} & \texttt{connection\_id}, \texttt{external\_event\_id}, \texttt{start\_at}, \texttt{end\_at}, \texttt{observed\_at} & Занятые интервалы, полученные из внешнего календаря. Используются при расчете доступных слотов. \\ \hline
+\texttt{calendar\_sync\_tasks} & \texttt{provider}, \texttt{connection\_id}, \texttt{appointment\_id}, \texttt{task\_type}, \texttt{status}, \texttt{attempt\_count} & Очередь задач календарной синхронизации. Статусы: \texttt{PENDING}, \texttt{PROCESSING}, \texttt{DONE}, \texttt{FAILED}. \\ \hline
+\texttt{notification\_destinations} & \texttt{user\_id}, \texttt{channel}, \texttt{destination}, \texttt{verified\_at}, \texttt{enabled} & Каналы доставки уведомлений пользователя. В текущей схеме используется канал \texttt{TELEGRAM}. \\ \hline
+\texttt{notification\_link\_tokens} & \texttt{user\_id}, \texttt{channel}, \texttt{code}, \texttt{expires\_at}, \texttt{consumed\_at} & Одноразовые коды для привязки канала уведомлений. Код хранится уникально до использования или истечения. \\ \hline
+\texttt{admin\_audit\_events} & \texttt{actor\_user\_id}, \texttt{action}, \texttt{target\_type}, \texttt{target\_id}, \texttt{before\_json}, \texttt{after\_json}, \texttt{correlation\_id} & Журнал административных действий. Ссылается на пользователя-исполнителя и хранит состояние объекта до и после изменения. \\ \hline
 \end{xltabular}
 }
 
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «masters» (Мастера)\label{db:masters}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:masters}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор профиля мастера. \\ \hline
-FK, UK & * & \texttt{user\_id} & \texttt{bigint} & Ссылка на учетную запись пользователя. \\ \hline
- &  & \texttt{display\_name} & \texttt{varchar(255)} & Отображаемое имя мастера. \\ \hline
- &  & \texttt{description} & \texttt{text} & Описание мастера или оказываемых услуг. \\ \hline
- & * & \texttt{timezone} & \texttt{varchar(64)} & Часовой пояс мастера. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания профиля. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «clients» (Клиенты)\label{db:clients}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:clients}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор профиля клиента. \\ \hline
-FK, UK & * & \texttt{user\_id} & \texttt{bigint} & Ссылка на учетную запись пользователя. \\ \hline
- &  & \texttt{display\_name} & \texttt{varchar(255)} & Отображаемое имя клиента. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания профиля. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «master\_client\_links» (Связи клиентов с мастерами)\label{db:links}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:links}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор связи. \\ \hline
-FK, UK & * & \texttt{master\_id} & \texttt{bigint} & Ссылка на мастера, входит в уникальную пару. \\ \hline
-FK, UK & * & \texttt{client\_id} & \texttt{bigint} & Ссылка на клиента, входит в уникальную пару. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания связи. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «invites» (Приглашения)\label{db:invites}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:invites}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор приглашения. \\ \hline
-FK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, создавший приглашение. \\ \hline
-FK &  & \texttt{client\_id} & \texttt{bigint} & Клиент, принявший приглашение. \\ \hline
-UK & * & \texttt{token} & \texttt{varchar(128)} & Уникальный токен пригласительной ссылки. \\ \hline
- & * & \texttt{status} & \texttt{varchar(16)} & Статус: \texttt{ACTIVE}, \texttt{ACCEPTED}, \texttt{REVOKED}, \texttt{EXPIRED}. \\ \hline
- &  & \texttt{expires\_at} & \texttt{timestamptz} & Дата истечения приглашения. \\ \hline
- &  & \texttt{accepted\_at} & \texttt{timestamptz} & Дата принятия приглашения. \\ \hline
- &  & \texttt{revoked\_at} & \texttt{timestamptz} & Дата отзыва приглашения. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания записи. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «master\_schedule\_settings» (Настройки расписания мастера)\label{db:schedule-settings}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:schedule-settings}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор настроек. \\ \hline
-FK, UK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, которому принадлежат настройки. \\ \hline
- & * & \texttt{slot\_duration\_minutes} & \texttt{integer} & Длительность одного слота от 5 до 720 минут. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания настроек. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «master\_availability\_rules» (Правила рабочей доступности)\label{db:availability-rules}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:availability-rules}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор правила. \\ \hline
-FK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, которому принадлежит правило. \\ \hline
- & * & \texttt{day\_of\_week} & \texttt{integer} & День недели от 1 до 7. \\ \hline
- &  & \texttt{title} & \texttt{varchar(255)} & Название правила доступности. \\ \hline
- & * & \texttt{start\_time} & \texttt{time} & Время начала рабочего интервала. \\ \hline
- & * & \texttt{end\_time} & \texttt{time} & Время окончания рабочего интервала. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания правила. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «bookings» (Бронирования)\label{db:bookings}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:bookings}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор бронирования. \\ \hline
-FK, UK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, к которому оформлена запись. \\ \hline
-FK, UK & * & \texttt{client\_id} & \texttt{bigint} & Клиент, оформивший запись. \\ \hline
-FK &  & \texttt{invite\_id} & \texttt{bigint} & Приглашение, использованное при записи. \\ \hline
- & * & \texttt{status} & \texttt{varchar(16)} & Статус: \texttt{CREATED}, \texttt{CANCELLED}, \texttt{UPCOMING}, \texttt{COMPLETED}. \\ \hline
-UK & * & \texttt{start\_at} & \texttt{timestamptz} & Начало интервала записи, входит в уникальный активный интервал. \\ \hline
-UK & * & \texttt{end\_at} & \texttt{timestamptz} & Окончание интервала записи, входит в уникальный активный интервал. \\ \hline
-UK &  & \texttt{google\_event\_id} & \texttt{varchar(512)} & Идентификатор события Google Calendar. \\ \hline
- &  & \texttt{cancelled\_at} & \texttt{timestamptz} & Дата отмены записи. \\ \hline
- &  & \texttt{cancellation\_reason} & \texttt{text} & Причина отмены записи. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания записи. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «google\_calendar\_connections» (Подключения Google Calendar)\label{db:google}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:google}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор подключения. \\ \hline
-FK, UK & * & \texttt{master\_id} & \texttt{bigint} & Мастер, подключивший календарь. \\ \hline
- & * & \texttt{google\_calendar\_id} & \texttt{varchar(255)} & Идентификатор календаря Google. \\ \hline
- &  & \texttt{google\_account\_email} & \texttt{varchar(255)} & Email подключенного Google-аккаунта. \\ \hline
- &  & \texttt{access\_token} & \texttt{text} & Access token для обращения к API. \\ \hline
- &  & \texttt{refresh\_token} & \texttt{text} & Refresh token для обновления доступа. \\ \hline
- &  & \texttt{token\_type} & \texttt{varchar(64)} & Тип токена. \\ \hline
- &  & \texttt{scope} & \texttt{text} & Область доступа OAuth. \\ \hline
- &  & \texttt{access\_token\_expires\_at} & \texttt{timestamptz} & Время истечения access token. \\ \hline
- & * & \texttt{connected\_at} & \texttt{timestamptz} & Дата подключения календаря. \\ \hline
- &  & \texttt{disconnected\_at} & \texttt{timestamptz} & Дата отключения календаря. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания записи. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «notification\_destinations» (Каналы уведомлений)\label{db:destinations}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:destinations}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор канала уведомлений. \\ \hline
-FK, UK & * & \texttt{user\_id} & \texttt{bigint} & Пользователь, которому принадлежит канал. \\ \hline
-UK & * & \texttt{channel} & \texttt{varchar(32)} & Тип канала доставки, используется \texttt{TELEGRAM}. \\ \hline
- & * & \texttt{destination} & \texttt{varchar(255)} & Адрес доставки уведомления. \\ \hline
- &  & \texttt{destination\_label} & \texttt{varchar(255)} & Отображаемая подпись канала. \\ \hline
- &  & \texttt{verified\_at} & \texttt{timestamptz} & Дата подтверждения канала. \\ \hline
- & * & \texttt{enabled} & \texttt{boolean} & Признак включения канала. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания записи. \\ \hline
- & * & \texttt{updated\_at} & \texttt{timestamptz} & Дата последнего обновления. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «notification\_link\_tokens» (Коды привязки уведомлений)\label{db:notification-tokens}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:notification-tokens}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор кода привязки. \\ \hline
-FK & * & \texttt{user\_id} & \texttt{bigint} & Пользователь, которому выдан код. \\ \hline
- & * & \texttt{channel} & \texttt{varchar(32)} & Канал привязки, используется \texttt{TELEGRAM}. \\ \hline
-UK & * & \texttt{code} & \texttt{varchar(64)} & Одноразовый код привязки. \\ \hline
- & * & \texttt{expires\_at} & \texttt{timestamptz} & Дата истечения кода. \\ \hline
- &  & \texttt{consumed\_at} & \texttt{timestamptz} & Дата использования кода. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания записи. \\ \hline
-\end{xltabular}
-}
-
-{\small
-\begin{xltabular}{\textwidth}{|p{1.7cm}|p{1.4cm}|p{3.5cm}|p{3.0cm}|X|}
-\caption{Атрибуты таблицы «outbox\_events» (Исходящие доменные события)\label{db:outbox}}\\ \hline
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\endfirsthead
-\continuecaption{Продолжение таблицы \ref{db:outbox}}
-\centrow Тип ключа & \centrow Обяз. & \centrow Атрибут & \centrow Тип данных & \centrow Назначение \\ \hline
-\finishhead
-PK & * & \texttt{id} & \texttt{bigint} & Идентификатор события в outbox. \\ \hline
-UK & * & \texttt{event\_id} & \texttt{uuid} & Уникальный идентификатор события. \\ \hline
- & * & \texttt{aggregate\_type} & \texttt{varchar(64)} & Тип агрегата, породившего событие. \\ \hline
- & * & \texttt{aggregate\_id} & \texttt{bigint} & Идентификатор агрегата. \\ \hline
- & * & \texttt{event\_type} & \texttt{varchar(128)} & Тип события, например \texttt{booking.created}. \\ \hline
- & * & \texttt{topic} & \texttt{varchar(255)} & Kafka-топик для публикации. \\ \hline
- &  & \texttt{message\_key} & \texttt{varchar(255)} & Ключ сообщения Kafka. \\ \hline
- & * & \texttt{payload} & \texttt{jsonb} & Полезная нагрузка события. \\ \hline
- & * & \texttt{headers} & \texttt{jsonb} & Заголовки события. \\ \hline
- & * & \texttt{status} & \texttt{varchar(16)} & Статус публикации: \texttt{PENDING}, \texttt{PUBLISHED}, \texttt{FAILED}. \\ \hline
- & * & \texttt{attempt\_count} & \texttt{integer} & Количество попыток публикации. \\ \hline
- & * & \texttt{next\_attempt\_at} & \texttt{timestamptz} & Время следующей попытки публикации. \\ \hline
- &  & \texttt{published\_at} & \texttt{timestamptz} & Дата успешной публикации. \\ \hline
- &  & \texttt{last\_error} & \texttt{text} & Текст последней ошибки публикации. \\ \hline
- & * & \texttt{created\_at} & \texttt{timestamptz} & Дата создания события. \\ \hline
-\end{xltabular}
-}
-
-Таким образом, реализация базы данных Easyappoint включает основные предметные таблицы для пользователей, мастеров, клиентов, приглашений и бронирований, а также служебные таблицы для расписания, внешнего календаря, уведомлений и событийной публикации. Ограничения целостности и индексы позволяют поддерживать корректность данных и ускорять выполнение ключевых сценариев бронирования.
+Таким образом, реализация базы данных Easyappoint включает предметные таблицы для пользователей, профилей, приглашений, расписания и записей, а также служебные таблицы для аутентификации, календарной интеграции, уведомлений, асинхронной публикации и административного аудита. Ограничения целостности и индексы поддерживают корректность данных и ускоряют выполнение ключевых сценариев онлайн-бронирования.
