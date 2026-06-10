@@ -245,6 +245,26 @@ relation/.style={-Latex, line width=0.65pt}
 \item повторные попытки публикации outbox-событий.
 \end{itemize}
 
+\subsubsection{Развертывание в Kubernetes}
+
+Платформа рассчитана на развертывание в кластере Kubernetes. Манифесты описаны декларативно и собираются инструментом Kustomize: общий базовый набор переопределяется продакшен-оверлеем, который задает пространство имен \texttt{easyappoint-prod}, доменные имена и параметры масштабирования.
+
+Прикладные сервисы оформлены как отдельные объекты Deployment с собственными Service:
+\begin{itemize}
+\item сервис \texttt{frontend} -- статическая раздача React-приложения через nginx;
+\item сервис \texttt{data-service} -- основной серверный сервис: REST API, бизнес-логика и публикация событий;
+\item сервис \texttt{calendar-sync-worker} -- фоновый обработчик синхронизации с Google Calendar, запускаемый из образа сервиса данных в роли воркера;
+\item сервис \texttt{telegram-bot} -- потребитель событий Kafka, доставляющий уведомления.
+\end{itemize}
+
+Внешний доступ обеспечивает Ingress-контроллер nginx с автоматическим выпуском TLS-сертификатов через cert-manager (Let's Encrypt). Запросы маршрутизируются по доменам: \texttt{easyappoint.online} направляется на frontend, \texttt{api.easyappoint.online} -- на сервис данных, а поддомен \texttt{www} перенаправляется на основной адрес.
+
+Зависимости платформы -- PostgreSQL и Kafka в режиме KRaft -- устанавливаются через Helm-чарты. Для прикладных сервисов настроены проверки готовности и живучести (readiness- и liveness-пробы), бюджеты прерывания (PodDisruptionBudget) и горизонтальное автомасштабирование (HorizontalPodAutoscaler) по загрузке процессора. Контейнеры запускаются в усиленном режиме безопасности: без повышения привилегий, с неизменяемой корневой файловой системой, непривилегированным пользователем и сброшенными Linux-привилегиями.
+
+Наблюдаемость обеспечивается стеком kube-prometheus-stack (Prometheus и Grafana) и подсистемой сбора логов Loki и Promtail; метрики прикладных сервисов собираются через объекты ServiceMonitor.
+
+Схема развертывания платформы представлена на рисунке~\ref{pl9:image}.
+
 \subsubsection{Заключение}
 
 Разработанная платформа Easyappoint реализует полный цикл онлайн-бронирования: регистрацию пользователей, настройку рабочей доступности мастера, создание пригласительных ссылок, просмотр свободных слотов, оформление и изменение записей, синхронизацию с Google Calendar и доставку уведомлений через Telegram. Компоненты системы спроектированы с учетом расширяемости, транзакционной надежности и возможности дальнейшего развертывания в контейнерной среде.
@@ -301,7 +321,6 @@ ER-модель базы данных представлена на рисунк
 
 В таблице \ref{db:physical-model} приведена физическая структура базы данных по фактическим миграциям проекта. В описании указаны ключевые атрибуты, ограничения состояний и основные связи между таблицами.
 
-{\footnotesize
 \begin{xltabular}{\textwidth}{|L{4.0cm}|L{4.2cm}|Y|}
 \caption{Физическая модель таблиц базы данных Easyappoint\label{db:physical-model}}\\ \hline
 \centrow Таблица & \centrow Ключевые атрибуты & \centrow Назначение и связи \\ \hline
@@ -317,18 +336,17 @@ ER-модель базы данных представлена на рисунк
 \texttt{clients} & \texttt{id}, \texttt{user\_id}, \texttt{display\_name} & Профиль клиента. Имеет уникальную ссылку на \texttt{users}. \\ \hline
 \texttt{master\_client\_links} & \texttt{master\_id}, \texttt{client\_id}, \texttt{created\_at} & Связь клиента с мастером. Пара \texttt{master\_id}/\texttt{client\_id} уникальна. \\ \hline
 \texttt{invites} & \texttt{master\_id}, \texttt{client\_id}, \texttt{token}, \texttt{status}, \texttt{expires\_at} & Пригласительные ссылки мастера. Статусы: \texttt{ACTIVE}, \texttt{ACCEPTED}, \texttt{REVOKED}, \texttt{EXPIRED}. \\ \hline
-\texttt{master\_schedule\_settings} & \texttt{master\_id}, \texttt{slot\_duration\_minutes} & Общие настройки расписания мастера. Длительность слота ограничена диапазоном от 5 до 720 минут. \\ \hline
-\texttt{master\_availability\_rules} & \texttt{master\_id}, \texttt{day\_of\_week}, \texttt{start\_time}, \texttt{end\_time}, \texttt{title} & Регулярные правила доступности мастера. Контролируются день недели и корректный временной интервал. \\ \hline
+\makecell[l]{\texttt{master\_schedule\_}\\\texttt{settings}} & \texttt{master\_id}, \texttt{slot\_duration\_minutes} & Общие настройки расписания мастера. Длительность слота ограничена диапазоном от 5 до 720 минут. \\ \hline
+\makecell[l]{\texttt{master\_availability\_}\\\texttt{rules}} & \texttt{master\_id}, \texttt{day\_of\_week}, \texttt{start\_time}, \texttt{end\_time}, \texttt{title} & Регулярные правила доступности мастера. Контролируются день недели и корректный временной интервал. \\ \hline
 \texttt{appointments} & \texttt{master\_id}, \texttt{client\_id}, \texttt{status}, \texttt{start\_at}, \texttt{end\_at}, \texttt{client\_note}, \texttt{cancelled\_at} & Записи клиента к мастеру. Статусы: \texttt{ACTIVE}, \texttt{CANCELLED}. Активные записи индексируются по мастеру, клиенту и временному окну. \\ \hline
 \texttt{outbox\_events} & \texttt{event\_id}, \texttt{aggregate\_type}, \texttt{aggregate\_id}, \texttt{event\_type}, \texttt{topic}, \texttt{payload}, \texttt{status} & Исходящие доменные события для Kafka. Статусы публикации: \texttt{PENDING}, \texttt{PUBLISHED}, \texttt{FAILED}. \\ \hline
 \texttt{calendar\_connections} & \texttt{master\_id}, \texttt{provider}, \texttt{status}, \texttt{external\_calendar\_id}, \texttt{access\_token}, \texttt{refresh\_token}, \texttt{sync\_cursor} & Подключения внешних календарей мастера. Провайдеры: \texttt{GOOGLE}, \texttt{YANDEX}; статусы: \texttt{ACTIVE}, \texttt{DISCONNECTED}, \texttt{FAILED}. \\ \hline
-\texttt{external\_calendar\_events} & \texttt{appointment\_id}, \texttt{connection\_id}, \texttt{external\_event\_id}, \texttt{sync\_status} & Связь записи приложения с внешним календарным событием. Ссылается на \texttt{appointments} и \texttt{calendar\_connections}. \\ \hline
+\makecell[l]{\texttt{external\_calendar\_}\\\texttt{events}} & \texttt{appointment\_id}, \texttt{connection\_id}, \texttt{external\_event\_id}, \texttt{sync\_status} & Связь записи приложения с внешним календарным событием. Ссылается на \texttt{appointments} и \texttt{calendar\_connections}. \\ \hline
 \texttt{external\_busy\_blocks} & \texttt{connection\_id}, \texttt{external\_event\_id}, \texttt{start\_at}, \texttt{end\_at}, \texttt{observed\_at} & Занятые интервалы, полученные из внешнего календаря. Используются при расчете доступных слотов. \\ \hline
 \texttt{calendar\_sync\_tasks} & \texttt{provider}, \texttt{connection\_id}, \texttt{appointment\_id}, \texttt{task\_type}, \texttt{status}, \texttt{attempt\_count} & Очередь задач календарной синхронизации. Статусы: \texttt{PENDING}, \texttt{PROCESSING}, \texttt{DONE}, \texttt{FAILED}. \\ \hline
-\texttt{notification\_destinations} & \texttt{user\_id}, \texttt{channel}, \texttt{destination}, \texttt{verified\_at}, \texttt{enabled} & Каналы доставки уведомлений пользователя. В текущей схеме используется канал \texttt{TELEGRAM}. \\ \hline
-\texttt{notification\_link\_tokens} & \texttt{user\_id}, \texttt{channel}, \texttt{code}, \texttt{expires\_at}, \texttt{consumed\_at} & Одноразовые коды для привязки канала уведомлений. Код хранится уникально до использования или истечения. \\ \hline
+\makecell[l]{\texttt{notification\_}\\\texttt{destinations}} & \texttt{user\_id}, \texttt{channel}, \texttt{destination}, \texttt{verified\_at}, \texttt{enabled} & Каналы доставки уведомлений пользователя. В текущей схеме используется канал \texttt{TELEGRAM}. \\ \hline
+\makecell[l]{\texttt{notification\_link\_}\\\texttt{tokens}} & \texttt{user\_id}, \texttt{channel}, \texttt{code}, \texttt{expires\_at}, \texttt{consumed\_at} & Одноразовые коды для привязки канала уведомлений. Код хранится уникально до использования или истечения. \\ \hline
 \texttt{admin\_audit\_events} & \texttt{actor\_user\_id}, \texttt{action}, \texttt{target\_type}, \texttt{target\_id}, \texttt{before\_json}, \texttt{after\_json}, \texttt{correlation\_id} & Журнал административных действий. Ссылается на пользователя-исполнителя и хранит состояние объекта до и после изменения. \\ \hline
 \end{xltabular}
-}
 
 Таким образом, реализация базы данных Easyappoint включает предметные таблицы для пользователей, профилей, приглашений, расписания и записей, а также служебные таблицы для аутентификации, календарной интеграции, уведомлений, асинхронной публикации и административного аудита. Ограничения целостности и индексы поддерживают корректность данных и ускоряют выполнение ключевых сценариев онлайн-бронирования.

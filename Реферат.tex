@@ -2,32 +2,29 @@
 
 Объем работы равен \formbytotal{lastpage}{страниц}{е}{ам}{ам}. Работа содержит \formbytotal{figurecnt}{иллюстраци}{ю}{и}{й}, \formbytotal{tablecnt}{таблиц}{у}{ы}{}, \arabic{bibcount} библиографических источников и 10 листов графического материала. Количество приложений -- 2. Графический материал представлен в приложении А. Фрагменты исходного кода представлены в приложении Б.
 
-Перечень ключевых слов: онлайн-бронирование, запись клиентов, мастер, клиент, web-приложение, микросервисная архитектура, Kotlin, Ktor, React, TypeScript, PostgreSQL, Kafka, Google Calendar, Telegram, уведомления, база данных, доступность, бронирование, пригласительная ссылка.
+Перечень ключевых слов: онлайн-бронирование, запись клиентов, мастер, клиент, администратор, web-приложение, микросервисная архитектура, Kotlin, Ktor, React, TypeScript, PostgreSQL, Kafka, Google Calendar, Telegram, уведомления, база данных, доступность, бронирование, пригласительная ссылка, аудит, мониторинг.
 
 Объектом разработки является платформа онлайн-бронирования услуг Easyappoint, предназначенная для организации записи клиентов к частному мастеру.
 
-Целью выпускной квалификационной работы является разработка программной платформы, автоматизирующей настройку рабочей доступности мастера, подключение клиентов по приглашению, расчет доступных временных интервалов, создание бронирований и отправку уведомлений о событиях записи.
+Целью выпускной квалификационной работы является разработка программной платформы, автоматизирующей рабочую доступность мастера, подключение клиентов по приглашению, расчет свободных интервалов, создание бронирований, отправку уведомлений и административный контроль состояния платформы.
 
-В процессе разработки были выделены основные сущности предметной области: пользователь, мастер, клиент, пригласительная ссылка, рабочая доступность, бронирование, внешнее календарное событие и событие уведомления. Спроектированы серверная и клиентская части, база данных, интеграция с Google Calendar, событийный обмен через Kafka и сервис Telegram-уведомлений.
+В процессе разработки были выделены основные сущности предметной области: пользователь, мастер, клиент, администратор, пригласительная ссылка, рабочая доступность, бронирование, внешнее календарное событие, событие уведомления и событие административного аудита. Спроектированы серверная и клиентская части, база данных, интеграция с Google Calendar, событийный обмен через Kafka, сервис Telegram-уведомлений, административный раздел и мониторинг Prometheus/Grafana.
 
 Серверная часть реализована на языке Kotlin с использованием Ktor, клиентская часть -- на React и TypeScript. Для хранения данных используется PostgreSQL, для миграций -- Flyway, для публикации событий -- Kafka.
-
-Разработанная платформа может использоваться частными специалистами для централизованного ведения расписания, снижения количества ручных операций и предотвращения конфликтов при записи клиентов.
 
 \selectlanguage{english}
 \abstract{ABSTRACT}
   
 The volume of work is \arabic{lastpage} pages. The work contains \formbytotal{figurecnt}{illustration}{}{s}{s}, \formbytotal{tablecnt}{table}{}{s}{s}, \arabic{bibcount} bibliographic sources and 10 sheets of graphic material. The number of applications is 2. Graphic material is presented in annex A. Source code fragments are presented in annex B.
 
-List of keywords: online booking, appointment scheduling, master, client, web application, microservice architecture, Kotlin, Ktor, React, TypeScript, PostgreSQL, Kafka, Google Calendar, Telegram, notifications, database, availability, booking, invite link.
+List of keywords: online booking, appointment scheduling, master, client, administrator, web application, microservice architecture, Kotlin, Ktor, React, TypeScript, PostgreSQL, Kafka, Google Calendar, Telegram, notifications, database, availability, booking, invite link, audit, monitoring.
 
 The object of the development is Easyappoint, an online booking platform for arranging appointments between an individual master and clients.
 
-The purpose of the final qualification work is to develop a software platform that automates master availability management, client onboarding by invite link, available slot calculation, booking creation and notification delivery for appointment events.
+The purpose of the final qualification work is to develop a software platform that automates master availability management, client onboarding by invite link, available slot calculation, booking creation, notification delivery for appointment events and administrative control of the platform state.
 
-During the development process, the main domain entities were identified: user, master, client, invite link, working availability, booking, external calendar event and notification event. The server-side and client-side parts, the database, Google Calendar integration, Kafka-based event exchange and the Telegram notification service were designed.
+During the development process, the main domain entities were identified: user, master, client, administrator, invite link, working availability, booking, external calendar event, notification event and administrative audit event. The server-side and client-side parts, the database, Google Calendar integration, Kafka-based event exchange, the Telegram notification service, the administrative section and monitoring through Prometheus and Grafana were designed.
 
 The server side is implemented in Kotlin using Ktor, while the client side is implemented with React and TypeScript. PostgreSQL is used for data storage, Flyway is used for database migrations, and Kafka is used for event publishing.
 
-The developed platform can be used by individual specialists to manage appointment schedules centrally, reduce manual operations and prevent booking conflicts.
 \selectlanguage{russian}

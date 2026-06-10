@@ -1,229 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1080" viewBox="0 0 1500 1080">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1576" height="1196" viewBox="12 -18 1576 1196">
 <defs>
-  <marker id="one" markerWidth="12" markerHeight="18" refX="6" refY="9" orient="auto" markerUnits="strokeWidth">
-    <path d="M6 2 V16" fill="none" stroke="#d68a28" stroke-width="1.8"/>
+  <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#7c5c2d"/>
   </marker>
-  <marker id="many" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="strokeWidth">
-    <path d="M2 2 L17 9 L2 16" fill="none" stroke="#d68a28" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  </marker>
-  <marker id="zeroOne" markerWidth="25" markerHeight="18" refX="24" refY="9" orient="auto" markerUnits="strokeWidth">
-    <circle cx="5" cy="9" r="3.8" fill="#fff" stroke="#d68a28" stroke-width="1.6"/>
-    <path d="M15 2 V16" fill="none" stroke="#d68a28" stroke-width="1.7"/>
-  </marker>
-  <marker id="zeroMany" markerWidth="31" markerHeight="18" refX="30" refY="9" orient="auto" markerUnits="strokeWidth">
-    <circle cx="5" cy="9" r="3.8" fill="#fff" stroke="#d68a28" stroke-width="1.5"/>
-    <path d="M13 2 L30 9 L13 16" fill="none" stroke="#d68a28" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </marker>
-  <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
-    <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000" flood-opacity="0.10"/>
-  </filter>
 </defs>
-<style>
-  .title { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 24px; font-weight: 700; fill: #222222; }
-  .entity-title { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 20px; font-weight: 700; fill: #222222; }
-  .field { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 18px; fill: #222222; }
-  .field-small { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 16px; fill: #555555; }
-  .label { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 17px; fill: #b36b13; font-style: italic; }
-  .rel { fill: none; stroke: #d68a28; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
-  .note { font-family: 'Times New Roman', 'Liberation Serif', serif; font-size: 15px; fill: #555555; }
-</style>
-<rect x="0" y="0" width="1500" height="1080" fill="#ffffff"/>
-<text class="title" x="750.0" y="35" text-anchor="middle">ER-модель данных Easyappoint</text>
-
-<path class="rel" d="M 590 150 L 520 150 L 520 248 L 310 248 L 310 280" marker-start="url(#one)" marker-end="url(#zeroOne)"/>
-<rect x="352.0" y="221.0" width="116.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="410" y="239" text-anchor="middle">имеет профиль</text>
-<path class="rel" d="M 910 150 L 980 150 L 980 248 L 1190 248 L 1190 280" marker-start="url(#one)" marker-end="url(#zeroOne)"/>
-<rect x="1032.0" y="221.0" width="116.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="1090" y="239" text-anchor="middle">имеет профиль</text>
-<path class="rel" d="M 470 340 L 590 340" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="501.0" y="313.0" width="58.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="530" y="331" text-anchor="middle">имеет</text>
-<path class="rel" d="M 1030 340 L 910 340" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="941.0" y="313.0" width="58.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="970" y="331" text-anchor="middle">имеет</text>
-<path class="rel" d="M 310 430 L 310 540" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="329.0" y="474.0" width="64.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="333" y="492" text-anchor="start">задает</text>
-<path class="rel" d="M 150 395 L 58 395 L 58 855 L 130 855" marker-start="url(#one)" marker-end="url(#zeroOne)"/>
-<rect x="59.0" y="742.0" width="92.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="63" y="760" text-anchor="start">подключает</text>
-<path class="rel" d="M 470 395 L 530 395 L 530 615 L 590 615" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="495.0" y="478.0" width="68.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="529" y="496" text-anchor="middle">создает</text>
-<path class="rel" d="M 1030 395 L 970 395 L 970 615 L 910 615" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="930.0" y="478.0" width="82.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="971" y="496" text-anchor="middle">принимает</text>
-<path class="rel" d="M 750 690 L 750 795" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="764.0" y="729.0" width="108.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="768" y="747" text-anchor="start">используется</text>
-<path class="rel" d="M 470 415 L 510 415 L 510 880 L 590 880" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="446.0" y="737.0" width="128.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="510" y="755" text-anchor="middle">получает записи</text>
-<path class="rel" d="M 1030 385 L 990 385 L 990 880 L 910 880" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="932.0" y="737.0" width="116.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="990" y="755" text-anchor="middle">создает запись</text>
-<path class="rel" d="M 910 115 L 1435 115 L 1435 615 L 1370 615" marker-start="url(#one)" marker-end="url(#zeroMany)"/>
-<rect x="1332.0" y="212.0" width="102.0" height="23" fill="#fff" opacity="0.94"/>
-<text class="label" x="1430" y="230" text-anchor="end">настраивает</text>
-<g>
-<rect x="590" y="70" width="320" height="154" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="590" y="70" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="618" cy="87.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="618" y="92.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="750.0" y="93" text-anchor="middle">Пользователь</text>
-<circle cx="608" cy="121" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="126">id : BIGINT</text>
-<text class="field-small" x="892" y="126" text-anchor="end">«PK»</text>
-<circle cx="608" cy="148" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="153">email : VARCHAR</text>
-<text class="field-small" x="892" y="153" text-anchor="end">«UK»</text>
-<circle cx="608" cy="175" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="180">role : VARCHAR</text>
-<circle cx="608" cy="202" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="207">telegram_user_id : BIGINT</text>
-<text class="field-small" x="892" y="207" text-anchor="end">«UK»</text>
-</g>
-<g>
-<rect x="150" y="280" width="320" height="154" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="150" y="280" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="178" cy="297.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="178" y="302.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="310.0" y="303" text-anchor="middle">Мастер</text>
-<circle cx="168" cy="331" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="182" y="336">id : BIGINT</text>
-<text class="field-small" x="452" y="336" text-anchor="end">«PK»</text>
-<circle cx="168" cy="358" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="182" y="363">user_id : BIGINT</text>
-<text class="field-small" x="452" y="363" text-anchor="end">«FK, UK»</text>
-<circle cx="168" cy="385" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="182" y="390">display_name : VARCHAR</text>
-<circle cx="168" cy="412" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="182" y="417">timezone : VARCHAR</text>
-</g>
-<g>
-<rect x="1030" y="280" width="320" height="127" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="1030" y="280" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="1058" cy="297.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="1058" y="302.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="1190.0" y="303" text-anchor="middle">Клиент</text>
-<circle cx="1048" cy="331" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="336">id : BIGINT</text>
-<text class="field-small" x="1332" y="336" text-anchor="end">«PK»</text>
-<circle cx="1048" cy="358" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="363">user_id : BIGINT</text>
-<text class="field-small" x="1332" y="363" text-anchor="end">«FK, UK»</text>
-<circle cx="1048" cy="385" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="390">display_name : VARCHAR</text>
-</g>
-<g>
-<rect x="590" y="300" width="320" height="127" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="590" y="300" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="618" cy="317.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="618" y="322.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="750.0" y="323" text-anchor="middle">Связь мастер-клиент</text>
-<circle cx="608" cy="351" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="356">id : BIGINT</text>
-<text class="field-small" x="892" y="356" text-anchor="end">«PK»</text>
-<circle cx="608" cy="378" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="383">master_id : BIGINT</text>
-<text class="field-small" x="892" y="383" text-anchor="end">«FK, UK»</text>
-<circle cx="608" cy="405" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="410">client_id : BIGINT</text>
-<text class="field-small" x="892" y="410" text-anchor="end">«FK, UK»</text>
-</g>
-<g>
-<rect x="130" y="540" width="340" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="130" y="540" width="340" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="158" cy="557.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="158" y="562.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="300.0" y="563" text-anchor="middle">Рабочая доступность</text>
-<circle cx="148" cy="591" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="596">id : BIGINT</text>
-<text class="field-small" x="452" y="596" text-anchor="end">«PK»</text>
-<circle cx="148" cy="618" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="623">master_id : BIGINT</text>
-<text class="field-small" x="452" y="623" text-anchor="end">«FK»</text>
-<circle cx="148" cy="645" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="650">day_of_week : INTEGER</text>
-<circle cx="148" cy="672" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="677">start_time : TIME</text>
-<circle cx="148" cy="699" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="704">end_time : TIME</text>
-</g>
-<g>
-<rect x="130" y="795" width="340" height="127" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="130" y="795" width="340" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="158" cy="812.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="158" y="817.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="300.0" y="818" text-anchor="middle">Google Calendar</text>
-<circle cx="148" cy="846" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="851">id : BIGINT</text>
-<text class="field-small" x="452" y="851" text-anchor="end">«PK»</text>
-<circle cx="148" cy="873" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="878">master_id : BIGINT</text>
-<text class="field-small" x="452" y="878" text-anchor="end">«FK»</text>
-<circle cx="148" cy="900" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="162" y="905">google_calendar_id : VARCHAR</text>
-</g>
-<g>
-<rect x="590" y="540" width="320" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="590" y="540" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="618" cy="557.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="618" y="562.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="750.0" y="563" text-anchor="middle">Приглашение</text>
-<circle cx="608" cy="591" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="596">id : BIGINT</text>
-<text class="field-small" x="892" y="596" text-anchor="end">«PK»</text>
-<circle cx="608" cy="618" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="623">master_id : BIGINT</text>
-<text class="field-small" x="892" y="623" text-anchor="end">«FK»</text>
-<circle cx="608" cy="645" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="650">client_id : BIGINT</text>
-<text class="field-small" x="892" y="650" text-anchor="end">«FK»</text>
-<circle cx="608" cy="672" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="677">token : VARCHAR</text>
-<text class="field-small" x="892" y="677" text-anchor="end">«UK»</text>
-<circle cx="608" cy="699" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="704">status : VARCHAR</text>
-</g>
-<g>
-<rect x="590" y="795" width="320" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="590" y="795" width="320" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="618" cy="812.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="618" y="817.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="750.0" y="818" text-anchor="middle">Бронирование</text>
-<circle cx="608" cy="846" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="851">id : BIGINT</text>
-<text class="field-small" x="892" y="851" text-anchor="end">«PK»</text>
-<circle cx="608" cy="873" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="878">master_id : BIGINT</text>
-<text class="field-small" x="892" y="878" text-anchor="end">«FK»</text>
-<circle cx="608" cy="900" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="905">client_id : BIGINT</text>
-<text class="field-small" x="892" y="905" text-anchor="end">«FK»</text>
-<circle cx="608" cy="927" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="932">start_at : TIMESTAMP</text>
-<circle cx="608" cy="954" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="622" y="959">status : VARCHAR</text>
-</g>
-<g>
-<rect x="1030" y="540" width="340" height="181" fill="#fff7e8" stroke="#e39a3a" stroke-width="2"/>
-<rect x="1030" y="540" width="340" height="34" fill="#ffe8c7" stroke="#e39a3a" stroke-width="2"/>
-<circle cx="1058" cy="557.0" r="10" fill="#f8f8f8" stroke="#b36b13" stroke-width="1.4"/>
-<text x="1058" y="562.0" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700" fill="#b36b13">E</text>
-<text class="entity-title" x="1200.0" y="563" text-anchor="middle">Канал уведомлений</text>
-<circle cx="1048" cy="591" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="596">id : BIGINT</text>
-<text class="field-small" x="1352" y="596" text-anchor="end">«PK»</text>
-<circle cx="1048" cy="618" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="623">user_id : BIGINT</text>
-<text class="field-small" x="1352" y="623" text-anchor="end">«FK»</text>
-<circle cx="1048" cy="645" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="650">channel : VARCHAR</text>
-<circle cx="1048" cy="672" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="677">destination : VARCHAR</text>
-<circle cx="1048" cy="699" r="3.2" fill="#fff" stroke="#b36b13" stroke-width="1.3"/>
-<text class="field" x="1062" y="704">enabled : BOOLEAN</text>
-</g>
+<rect x="12" y="-18" width="1576" height="1196" fill="#ffffff"/>
+<rect x="520" y="90" width="560" height="880" rx="10" fill="#dbe4ff" stroke="#bac8ff" stroke-width="2" opacity="0.35"/>
+<rect x="60" y="250" width="410" height="720" rx="10" fill="#d3f9d8" stroke="#b2f2bb" stroke-width="2" opacity="0.35"/>
+<rect x="1130" y="250" width="410" height="720" rx="10" fill="#e5dbff" stroke="#d0bfff" stroke-width="2" opacity="0.35"/>
+<rect x="650" y="120" width="300" height="140" rx="10" fill="#a5d8ff" stroke="#1c7ed6" stroke-width="2" opacity="1"/>
+<rect x="130" y="300" width="280" height="128" rx="10" fill="#b2f2bb" stroke="#2f9e44" stroke-width="2" opacity="1"/>
+<rect x="1190" y="300" width="280" height="118" rx="10" fill="#b2f2bb" stroke="#2f9e44" stroke-width="2" opacity="1"/>
+<rect x="650" y="325" width="300" height="118" rx="10" fill="#c3fae8" stroke="#0ca678" stroke-width="2" opacity="1"/>
+<rect x="650" y="505" width="300" height="135" rx="10" fill="#fff3bf" stroke="#f08c00" stroke-width="2" opacity="1"/>
+<rect x="130" y="515" width="280" height="150" rx="10" fill="#d8f5a2" stroke="#74b816" stroke-width="2" opacity="1"/>
+<rect x="650" y="720" width="300" height="150" rx="10" fill="#ffd8a8" stroke="#e8590c" stroke-width="2" opacity="1"/>
+<rect x="130" y="740" width="280" height="150" rx="10" fill="#c3fae8" stroke="#1098ad" stroke-width="2" opacity="1"/>
+<rect x="1190" y="505" width="280" height="150" rx="10" fill="#eebefa" stroke="#ae3ec9" stroke-width="2" opacity="1"/>
+<rect x="1190" y="720" width="280" height="135" rx="10" fill="#d0bfff" stroke="#7048e8" stroke-width="2" opacity="1"/>
+<rect x="1190" y="905" width="280" height="130" rx="10" fill="#ffc9c9" stroke="#e03131" stroke-width="2" opacity="1"/>
+<polyline points="650,190 490,190 490,364 410,364" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="950,190 1110,190 1110,359 1190,359" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="410,364 530,364 530,384 650,384" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="1190,359 1070,359 1070,384 950,384" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="270,428 270,515" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="410,398 530,398 530,572 650,572" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="1190,388 1070,388 1070,572 950,572" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="410,364 490,364 490,795 650,795" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="1190,359 1110,359 1110,795 950,795" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="800,640 800,720" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="270,428 270,740" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="410,815 530,815 530,795 650,795" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="950,190 1070,190 1070,580 1190,580" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="950,795 1190,787" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<polyline points="1470,970 1540,970 1540,190 950,190" fill="none" stroke="#7c5c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowhead)"/>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="30" fill="#1f2933" text-anchor="start"><tspan x="475" y="60">ER-модель базы данных Easyappoint</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#52606d" text-anchor="start"><tspan x="475" y="84">Основные сущности и связи по миграциям Flyway V1-V2</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="800" y="154">Пользователь</tspan><tspan x="800" y="175.6">PK id</tspan><tspan x="800" y="197.2">email, display_name</tspan><tspan x="800" y="218.8">role, status</tspan><tspan x="800" y="240.39999999999998">telegram_user_id</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="270" y="328">Мастер</tspan><tspan x="270" y="349.6">PK id</tspan><tspan x="270" y="371.2">FK user_id</tspan><tspan x="270" y="392.8">display_name</tspan><tspan x="270" y="414.4">timezone</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="1330" y="333.8">Клиент</tspan><tspan x="1330" y="355.40000000000003">PK id</tspan><tspan x="1330" y="377">FK user_id</tspan><tspan x="1330" y="398.6">display_name</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="800" y="358.8">Связь мастер-клиент</tspan><tspan x="800" y="380.40000000000003">PK id</tspan><tspan x="800" y="402">FK master_id</tspan><tspan x="800" y="423.6">FK client_id</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="800" y="536.5">Приглашение</tspan><tspan x="800" y="558.1">PK id</tspan><tspan x="800" y="579.7">FK master_id</tspan><tspan x="800" y="601.3">FK client_id</tspan><tspan x="800" y="622.9">token, status</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="270" y="554">Рабочая доступность</tspan><tspan x="270" y="575.6">settings.master_id</tspan><tspan x="270" y="597.2">rules.master_id</tspan><tspan x="270" y="618.8">day_of_week</tspan><tspan x="270" y="640.4">start_time, end_time</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="800" y="748.2">Запись на услугу</tspan><tspan x="800" y="769.8000000000001">PK id</tspan><tspan x="800" y="791.4000000000001">FK master_id</tspan><tspan x="800" y="813">FK client_id</tspan><tspan x="800" y="834.6">start_at, end_at</tspan><tspan x="800" y="856.2">status</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="270" y="779">Внешний календарь</tspan><tspan x="270" y="800.6">connections.master_id</tspan><tspan x="270" y="822.2">provider, status</tspan><tspan x="270" y="843.8">external_events</tspan><tspan x="270" y="865.4">busy_blocks</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="1330" y="544">Каналы уведомлений</tspan><tspan x="1330" y="565.6">destinations.user_id</tspan><tspan x="1330" y="587.2">link_tokens.user_id</tspan><tspan x="1330" y="608.8">channel</tspan><tspan x="1330" y="630.4">destination, code</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="1330" y="751.5">Outbox-событие</tspan><tspan x="1330" y="773.1">PK id</tspan><tspan x="1330" y="794.7">event_id</tspan><tspan x="1330" y="816.3">aggregate_id</tspan><tspan x="1330" y="837.9">event_type, status</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#1f2933" text-anchor="middle"><tspan x="1330" y="934">Административный аудит</tspan><tspan x="1330" y="955.6">PK id</tspan><tspan x="1330" y="977.2">FK actor_user_id</tspan><tspan x="1330" y="998.8">action, target_type</tspan><tspan x="1330" y="1020.4">target_id</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="18" fill="#52606d" text-anchor="start"><tspan x="72" y="1088">Кратность указана как 1, 0..1, 0..N. Полные таблицы, ограничения и индексы раскрыты в реляционной модели и физическом описании БД.</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="470" y="301">1 : 0..1 профиль</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="1010" y="301">1 : 0..1 профиль</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="510" y="358">1 : 0..N</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="1040" y="358">1 : 0..N</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="285" y="481">1 : 0..N задает</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="505" y="516">1 : 0..N создает</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="990" y="516">0..1 : 0..N принимает</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="505" y="706">1 : 0..N ведет</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="990" y="706">1 : 0..N бронирует</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="820" y="691">открывает доступ</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="285" y="720">1 : 0..N синхронизация</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="505" y="861">0..N события</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="1040" y="571">1 : 0..N каналы</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="1025" y="776">порождает событие</tspan></text>
+<text font-family="Times New Roman, Liberation Serif, serif" font-size="16" fill="#7c5c2d" text-anchor="start"><tspan x="1235" y="896">0..N : 1 администратор</tspan></text>
 </svg>
